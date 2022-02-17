@@ -1,3 +1,7 @@
+import {
+  ArrowUpCircle,
+  ArrowDownCircle,
+} from "react-feather";
 
 
 function Inventory() {
