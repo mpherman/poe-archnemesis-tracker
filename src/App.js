@@ -1,31 +1,36 @@
 import React from 'react';
 import './App.css';
+import { Grid } from "@mui/material";
 import Inventory from './Components/Inventory';
-import Monsters from './Util/Monsters';
+import BlankInventory from './Data/MonsterInventory.json'
 
 function App() {
-    const monsterKeys = Object.keys(Monsters);
-    const monsterImages = monsterKeys.map((x) => {
-            console.log(Monsters[x].img);
-            const imageSrc = Monsters[x].img;
-            return (<React.Fragment>
-                {x}
-                <img src={imageSrc} alt={x}/>
-            </React.Fragment>);
-        });
-  return (
-    <div className="App">
-      <header className="App-header">
-          <p>
-            Archnemesis Tracker
-          </p>
-      </header>
-      <div className="App-body">
-        <Inventory />  
-        {monsterImages}
-      </div>
-    </div>
-  );
+    console.log(BlankInventory);
+    // Load inventory from localStorage
+    let inventory = localStorage.getItem('inventory');
+    if (!inventory) {
+        inventory = BlankInventory;
+        localStorage.setItem('inventory', JSON.stringify(BlankInventory));
+    }
+    else {
+        inventory = JSON.parse(inventory);
+    }
+    return (
+        <div className="App">
+        <header className="App-header">
+            <h1>
+                Archnemesis Tracker
+            </h1>
+        </header>
+        <div className="App-body">
+            <Grid container spacing={0}>
+                <Grid item xs={3}>
+                    <Inventory inventoryProp={inventory}/>  
+                </Grid>
+            </Grid>
+        </div>
+        </div>
+    );
 }
 
 export default App;
