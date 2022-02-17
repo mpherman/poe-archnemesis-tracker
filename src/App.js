@@ -7,7 +7,6 @@ import Recipes from './Components/Recipes';
 import BlankInventory from './Data/MonsterInventory.json'
 
 function App() {
-    console.log(BlankInventory);
     // Load inventory from localStorage
     let loadedInventory = localStorage.getItem('inventory');
     if (!loadedInventory) {
@@ -19,20 +18,25 @@ function App() {
     }
     const [inventory, setInventory] = useState(loadedInventory);
     // Load combo from localStorage
-    let combo = localStorage.getItem('combo');
-    if (!combo) {
-        combo = [];
-        localStorage.setItem('combo', JSON.stringify(combo));
+    let loadedCombo = localStorage.getItem('combo');
+    if (!loadedCombo) {
+        loadedCombo = [];
+        localStorage.setItem('combo', JSON.stringify(loadedCombo));
     }
     else {
-        combo = JSON.parse(combo);
+        loadedCombo = JSON.parse(loadedCombo);
     }
-
+    const [combo, setCombo] = useState(loadedCombo);
     function updateInventory(newValues) {
         setInventory(inventory => ({ ...inventory, ...newValues }));
     }
     function addToCombo(name) {
-        console.log('adding to combo:' + name)
+        if (combo.length >= 4) return;
+        if (combo.indexOf(name) !== -1) return;
+        setCombo(combo => ([...combo, name]));
+    }
+    function removeFromCombo(name) {
+        setCombo(combo => (combo.filter(item => item !== name)))
     }
     return (
         <div className="App">
@@ -44,7 +48,7 @@ function App() {
         <div className="App-body">
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <Combo comboProp={combo}/>  
+                    <Combo combo={combo} removeFromCombo={removeFromCombo}/>  
                 </Grid>
                 <Grid item xs={12}>
                     <Recipes />  
