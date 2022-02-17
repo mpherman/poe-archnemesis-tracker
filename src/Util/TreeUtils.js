@@ -41,11 +41,9 @@ function getRemainingComponents(tree, inventory, components) {
     for (let i = 0; i < monsters.length; i++) {
         const monster = monsters[i];
         if (inventory[monster] > 0) {
-            console.log("We have this monster: " + monster + "(" + inventory[monster] + ")");
             inventory[monster]--;
         }
         else if (isTierOne(monster)) {
-            console.log("We dont't have this monster but its Tier 1: " + monster);
             if (!components[monster]) {
                 components[monster] = 1;
             }
@@ -54,7 +52,6 @@ function getRemainingComponents(tree, inventory, components) {
             }
         }
         else {
-            console.log("We dont't have this monster and its not Tier 1: " + monster);
             getRemainingComponents(tree[monster], inventory, components);
         }
     }
