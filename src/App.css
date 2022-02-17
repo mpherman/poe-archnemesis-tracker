@@ -21,6 +21,23 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  margin: 0px 50px;
+  padding: 0px 50px;
+}
+
+.monster-grid-item {
+    padding: 5px;
+}
+
+.monster-grid-title {
+    padding-left: 15px;
+}
+
+.monster-grid-button {
+  text-align: center;
+}
+.monster-grid-info {
+  text-align: center;
 }
 
 .App-link {
