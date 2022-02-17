@@ -4,8 +4,7 @@ import {
   CheckSquare
 } from "react-feather";
 
-function Recipe({monster, components}) {
-    console.log(monster);
+function Recipe({monster, components, update}) {
     const imgSrc = Monsters[monster].img;
     const recipeComponents = components.map((component, index) => {
         return (
@@ -18,12 +17,15 @@ function Recipe({monster, components}) {
                 </Paper>
             </Grid>
         )
-    })
+    });
+    function handleUpdate(event) {
+        update(monster);
+    }
     return (
         <Grid className="recipe-container" container spacing={1}>
             <Grid item xs={12}>
-                <IconButton>
-                    <CheckSquare className="success-light"/>
+                <IconButton onClick={handleUpdate}>
+                    <CheckSquare className="success-light" />
                 </IconButton>
                 {monster}
                 <img src={imgSrc} alt={monster} />
@@ -35,10 +37,10 @@ function Recipe({monster, components}) {
     )
 }
 
-function Recipes({recipes}) {
+function Recipes({recipes, update}) {
     const recipeMonsters = Object.keys(recipes);
     const recipeGrid = recipeMonsters.map((recipeMonster, index) => {
-        return <Recipe monster={recipeMonster} components={recipes[recipeMonster]} key={index}/>
+        return <Recipe monster={recipeMonster} components={recipes[recipeMonster]} key={index} update={update}/>
     })
     return (
         <div className="monster-combo-box">

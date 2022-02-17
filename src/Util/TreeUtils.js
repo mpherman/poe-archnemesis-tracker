@@ -10,9 +10,10 @@ function createMonsterTree(monster) {
     }
     let recipe = MONSTER_RECIPES[monster];
     let monster_tree = {};
+    monster_tree[monster] = {}
     for (let i = 0; i < recipe.length; i++) {
         const recipeMonster = recipe[i];
-        monster_tree[recipeMonster] = createMonsterTree(recipeMonster)
+        monster_tree[monster][recipeMonster] = createMonsterTree(recipeMonster)
     }
     return monster_tree;
 }
@@ -80,6 +81,10 @@ function getActiveRecipes(tree, inventory, recipes) {
     }
 }
 
+function getRecipe(monster) {
+    return MONSTER_RECIPES[monster];
+}
+
 function copy(object) {
     return JSON.parse(JSON.stringify(object));
 }
@@ -91,6 +96,7 @@ const TreeUtils = {
     getRemainingComponents: getRemainingComponents,
     getActiveRecipes: getActiveRecipes,
     copy: copy,
+    getRecipe: getRecipe,
 }
 
 export default TreeUtils;
