@@ -29,7 +29,7 @@ function Monster({name, img, count, add, subtract, addToCombo}) {
                     </IconButton>
                 </Grid>
             </Grid>
-            <Grid container xs={10}>
+            <Grid container item={true} xs={10}>
                 <Grid className="monster-grid-title" item xs={12}>
                     {name}
                 </Grid>
