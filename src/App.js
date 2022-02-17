@@ -6,6 +6,7 @@ import Combo from './Components/Combo';
 import Recipes from './Components/Recipes';
 import BlankInventory from './Data/MonsterInventory.json'
 import TreeUtils from './Util/TreeUtils';
+import MissingPieces from './Components/Missing';
 
 function App() {
     // Load inventory from localStorage
@@ -44,8 +45,9 @@ function App() {
     }
 
     useEffect(() => {
-        console.log("updating recipes");
         updateRecipes();
+        updateMissing();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [combo, inventory]);
 
     // Get recipes
@@ -53,14 +55,11 @@ function App() {
     function updateRecipes() {
         let inventoryCopy = TreeUtils.copy(inventory);
         let newRecipes = {};
-        console.log(combo);
         for (let i = 0; i < combo.length; i++) {
             const monster = combo[i];
             const tree = TreeUtils.createMonsterTree(monster);
-            console.log(monster, tree, inventoryCopy);
             TreeUtils.getActiveRecipes(tree, inventoryCopy, newRecipes);
         }
-        console.log("New recipes:", newRecipes);
         setRecipes((oldRecipes) => newRecipes);
     }
     function completeRecipe(monster) {
@@ -72,6 +71,24 @@ function App() {
         newInventoryValues[monster] = inventory[monster] + 1;
         updateInventory(newInventoryValues);
         //updateRecipes();
+    }
+
+    // Determine missing pieces
+    const [missing, setMissing] = useState({});
+    function updateMissing() {
+        let remainingComponents = {};
+        let inventoryCopy = TreeUtils.copy(inventory);
+        for (let i = 0; i < combo.length; i++) {
+            const monster = combo[i];
+            const tree = TreeUtils.createMonsterTree(monster);
+            TreeUtils.getRemainingComponents(tree, inventoryCopy, remainingComponents);
+        }
+        setMissing((oldMissing) => remainingComponents);
+    }
+    function collectMonster(name) {
+        const newValue = {};
+        newValue[name] = inventory[name] + 1;
+        updateInventory(newValue);
     }
     return (
         <div className="App">
@@ -87,6 +104,9 @@ function App() {
                 </Grid>
                 <Grid item xs={12}>
                     <Recipes recipes={recipes} update={completeRecipe}/>  
+                </Grid>
+                <Grid item xs={12}>
+                    <MissingPieces missing={missing} collectMonster={collectMonster}/>  
                 </Grid>
                 <Grid item xs={12}>
                     <Inventory inventory={inventory} updateInventory={updateInventory} addToCombo={addToCombo}/>  
