@@ -25,8 +25,13 @@
   padding: 0px 50px;
 }
 
+.monster-combo-box {
+    min-height: calc(10px + 20vh);
+}
+
 .monster-grid-item {
     padding: 5px;
+    background-color: #bcc4cf;
 }
 
 .monster-grid-title {
@@ -42,12 +47,22 @@
 }
 
 .monster-grid-combo-button {
-  color: #9fcf69;
+  color: #6a824e;
   margin-left:5px;
   margin-top:-15px;
 }
+
+.monster-grid-combo-remove-button {
+  color: #de7a73;
+}
+
 .monster-grid-info {
   text-align: center;
+}
+
+.reward-icon {
+    height: 40px;
+    width: 40px;
 }
 
 .App-link {
