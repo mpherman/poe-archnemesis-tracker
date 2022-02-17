@@ -25,7 +25,7 @@ function Monster({name, img, count, add, subtract, addToCombo}) {
                 </Grid>
                 <Grid className="monster-grid-button" item xs={12}>
                     <IconButton onClick={handleAddToCombo}>
-                        <PlusSquare className="monster-grid-combo-button" />
+                        <PlusSquare className="monster-grid-combo-button success" />
                     </IconButton>
                 </Grid>
             </Grid>

@@ -8,10 +8,10 @@ function Monster({name, img, rewards, removeFromCombo}) {
     function handleRemoveFromCombo(event) {
         removeFromCombo(name);
     }
-    const rewardImages = rewards.map((reward) => {
+    const rewardImages = rewards.map((reward, index) => {
         const rewardImg = "rewards/" + reward + ".png";
         return (
-            <Grid item xs={3}>
+            <Grid item xs={3} key={index}>
                 <img src={rewardImg} alt={reward} className="reward-icon"/>
             </Grid>
         )
@@ -28,7 +28,7 @@ function Monster({name, img, rewards, removeFromCombo}) {
                     </IconButton>
                 </Grid>
             </Grid>
-            <Grid container xs={10}>
+            <Grid container item={true} xs={10}>
                 <Grid className="monster-grid-title" item xs={12}>
                     {name}
                 </Grid>
