@@ -5,6 +5,7 @@ import Inventory from './Components/Inventory';
 import Combo from './Components/Combo';
 import Recipes from './Components/Recipes';
 import BlankInventory from './Data/MonsterInventory.json'
+import TreeUtils from './Util/TreeUtils';
 
 function App() {
     // Load inventory from localStorage
@@ -29,14 +30,30 @@ function App() {
     const [combo, setCombo] = useState(loadedCombo);
     function updateInventory(newValues) {
         setInventory(inventory => ({ ...inventory, ...newValues }));
+        updateRecipes();
     }
     function addToCombo(name) {
         if (combo.length >= 4) return;
         if (combo.indexOf(name) !== -1) return;
         setCombo(combo => ([...combo, name]));
+        updateRecipes();
     }
     function removeFromCombo(name) {
-        setCombo(combo => (combo.filter(item => item !== name)))
+        setCombo(combo => (combo.filter(item => item !== name)));
+        updateRecipes();
+    }
+
+    // Get recipes
+    const [recipes, setRecipes] = useState({});
+    function updateRecipes() {
+        let inventoryCopy = TreeUtils.copy(inventory);
+        let newRecipes = {};
+        for (let i = 0; i < combo.length; i++) {
+            const monster = combo[i];
+            const tree = TreeUtils.createMonsterTree(monster);
+            TreeUtils.getActiveRecipes(tree, inventoryCopy, newRecipes);
+        }
+        setRecipes((oldRecipes) => newRecipes);
     }
     return (
         <div className="App">
@@ -51,7 +68,7 @@ function App() {
                     <Combo combo={combo} removeFromCombo={removeFromCombo}/>  
                 </Grid>
                 <Grid item xs={12}>
-                    <Recipes />  
+                    <Recipes recipes={recipes}/>  
                 </Grid>
                 <Grid item xs={12}>
                     <Inventory inventory={inventory} updateInventory={updateInventory} addToCombo={addToCombo}/>  

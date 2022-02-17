@@ -46,8 +46,15 @@
   padding: 0px;
 }
 
-.monster-grid-combo-button {
+.success {
   color: #6a824e;
+}
+
+.success-light {
+    color: #bdeb88;
+}
+
+.monster-grid-combo-button {
   margin-left:5px;
   margin-top:-15px;
 }
@@ -58,6 +65,14 @@
 
 .monster-grid-info {
   text-align: center;
+}
+
+.monster-image {
+    margin: auto;
+}
+
+.recipe-container {
+    margin-top: 20px !important;
 }
 
 .reward-icon {
