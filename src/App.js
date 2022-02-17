@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import './App.css';
 import { Grid } from "@mui/material";
 import Inventory from './Components/Inventory';
@@ -30,30 +30,48 @@ function App() {
     const [combo, setCombo] = useState(loadedCombo);
     function updateInventory(newValues) {
         setInventory(inventory => ({ ...inventory, ...newValues }));
-        updateRecipes();
+        //updateRecipes();
     }
     function addToCombo(name) {
         if (combo.length >= 4) return;
         if (combo.indexOf(name) !== -1) return;
         setCombo(combo => ([...combo, name]));
-        updateRecipes();
+        //updateRecipes();
     }
     function removeFromCombo(name) {
         setCombo(combo => (combo.filter(item => item !== name)));
-        updateRecipes();
+        //updateRecipes();
     }
+
+    useEffect(() => {
+        console.log("updating recipes");
+        updateRecipes();
+    }, [combo, inventory]);
 
     // Get recipes
     const [recipes, setRecipes] = useState({});
     function updateRecipes() {
         let inventoryCopy = TreeUtils.copy(inventory);
         let newRecipes = {};
+        console.log(combo);
         for (let i = 0; i < combo.length; i++) {
             const monster = combo[i];
             const tree = TreeUtils.createMonsterTree(monster);
+            console.log(monster, tree, inventoryCopy);
             TreeUtils.getActiveRecipes(tree, inventoryCopy, newRecipes);
         }
+        console.log("New recipes:", newRecipes);
         setRecipes((oldRecipes) => newRecipes);
+    }
+    function completeRecipe(monster) {
+        const recipe = TreeUtils.getRecipe(monster);
+        let newInventoryValues = {};
+        for (let i = 0; i < recipe.length; i++) {
+            newInventoryValues[recipe[i]] = inventory[recipe[i]] - 1;
+        }
+        newInventoryValues[monster] = inventory[monster] + 1;
+        updateInventory(newInventoryValues);
+        //updateRecipes();
     }
     return (
         <div className="App">
@@ -65,10 +83,10 @@ function App() {
         <div className="App-body">
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <Combo combo={combo} removeFromCombo={removeFromCombo}/>  
+                    <Combo combo={combo} inventory={inventory} removeFromCombo={removeFromCombo}/>  
                 </Grid>
                 <Grid item xs={12}>
-                    <Recipes recipes={recipes}/>  
+                    <Recipes recipes={recipes} update={completeRecipe}/>  
                 </Grid>
                 <Grid item xs={12}>
                     <Inventory inventory={inventory} updateInventory={updateInventory} addToCombo={addToCombo}/>  

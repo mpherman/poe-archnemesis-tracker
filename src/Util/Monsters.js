@@ -210,7 +210,7 @@ const Monsters = {
     "Necromancer": {
         "img": "monsters/necromancer.png",
         "rewards": [
-            "generic"
+            "random"
         ],
     },
     "Drought Bringer": {

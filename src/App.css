@@ -34,6 +34,16 @@
     background-color: #bcc4cf;
 }
 
+.combo-grid-missing {
+    padding: 5px;
+    background-color: #bcc4cf;
+}
+
+.combo-grid-completed {
+    padding: 5px;
+    background-color: #bdeb88;
+}
+
 .monster-grid-title {
     padding-left: 15px;
 }

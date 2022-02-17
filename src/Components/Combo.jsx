@@ -4,7 +4,7 @@ import {
   MinusSquare
 } from "react-feather";
 
-function Monster({name, img, rewards, removeFromCombo}) {
+function Monster({name, img, rewards, haveInInventory, removeFromCombo}) {
     function handleRemoveFromCombo(event) {
         removeFromCombo(name);
     }
@@ -16,8 +16,9 @@ function Monster({name, img, rewards, removeFromCombo}) {
             </Grid>
         )
     })
+    const className = haveInInventory ? 'combo-grid-completed' : 'combo-grid-missing';
     return (
-        <Grid className="monster-grid-item" container spacing={0}>
+        <Grid className={className} container spacing={0}>
             <Grid item xs={2}>
                <Grid item xs={12}>
                     <img src={img} alt={name} />
@@ -39,14 +40,14 @@ function Monster({name, img, rewards, removeFromCombo}) {
 }
 
 
-function Combo({combo, removeFromCombo}) {
+function Combo({combo, inventory, removeFromCombo}) {
     const ComboPieces = combo.map((monster) => {
         const imageSrc = Monsters[monster].img;
         const rewards = Monsters[monster].rewards;
         return (
             <Grid item p={0} xs={3} key={monster}>
                 <Paper elevation={3}>
-                    <Monster name={monster} img={imageSrc} rewards={rewards} removeFromCombo={removeFromCombo}/>
+                    <Monster name={monster} img={imageSrc} rewards={rewards} haveInInventory={inventory[monster] > 0} removeFromCombo={removeFromCombo}/>
                 </Paper>
             </Grid>
         );
