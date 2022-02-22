@@ -4,44 +4,34 @@ import { Grid } from "@mui/material";
 import Inventory from './Components/Inventory';
 import Combo from './Components/Combo';
 import Recipes from './Components/Recipes';
-import BlankInventory from './Data/MonsterInventory.json'
+import BlankInventory from './Data/MonsterInventory.json';
 import TreeUtils from './Util/TreeUtils';
+import StorageUtils from './Data/StorageUtils';
 import MissingPieces from './Components/Missing';
 
 function App() {
     // Load inventory from localStorage
-    let loadedInventory = localStorage.getItem('inventory');
-    if (!loadedInventory) {
-        loadedInventory = BlankInventory;
-        localStorage.setItem('inventory', JSON.stringify(BlankInventory));
-    }
-    else {
-        loadedInventory = JSON.parse(loadedInventory);
-    }
+    let loadedInventory =  StorageUtils.load('inventory', BlankInventory);
     const [inventory, setInventory] = useState(loadedInventory);
     // Load combo from localStorage
-    let loadedCombo = localStorage.getItem('combo');
-    if (!loadedCombo) {
-        loadedCombo = [];
-        localStorage.setItem('combo', JSON.stringify(loadedCombo));
-    }
-    else {
-        loadedCombo = JSON.parse(loadedCombo);
-    }
+    let loadedCombo = StorageUtils.load('combo', []);
     const [combo, setCombo] = useState(loadedCombo);
     function updateInventory(newValues) {
-        setInventory(inventory => ({ ...inventory, ...newValues }));
-        //updateRecipes();
+        const newInventory = { ...inventory, ...newValues };
+        setInventory(inventory => newInventory);
+        StorageUtils.save('inventory', newInventory);
     }
     function addToCombo(name) {
         if (combo.length >= 4) return;
         if (combo.indexOf(name) !== -1) return;
-        setCombo(combo => ([...combo, name]));
-        //updateRecipes();
+        let newCombo = [...combo, name];
+        setCombo(combo => newCombo);
+        StorageUtils.save('combo', newCombo);
     }
     function removeFromCombo(name) {
-        setCombo(combo => (combo.filter(item => item !== name)));
-        //updateRecipes();
+        const newCombo = combo.filter(item => item !== name);
+        setCombo(combo => newCombo);
+        StorageUtils.save('combo', newCombo);
     }
 
     useEffect(() => {
@@ -70,7 +60,6 @@ function App() {
         }
         newInventoryValues[monster] = inventory[monster] + 1;
         updateInventory(newInventoryValues);
-        //updateRecipes();
     }
 
     // Determine missing pieces
