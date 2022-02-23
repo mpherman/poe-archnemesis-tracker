@@ -25,6 +25,10 @@
   padding: 0px 50px;
 }
 
+.inventory {
+    min-height: 400px;
+}
+
 .tooltip-tree {
     max-width: 80%;
     max-height: 80%;
