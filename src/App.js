@@ -49,7 +49,9 @@ function App() {
         for (let i = 0; i < combo.length; i++) {
             const monster = combo[i];
             const tree = TreeUtils.createMonsterTree(monster);
-            TreeUtils.getActiveRecipes(tree, inventoryCopy, newRecipes);
+            let monsterRecipes = {}
+            TreeUtils.getActiveRecipes(tree, inventoryCopy, monsterRecipes);
+            newRecipes[monster] = monsterRecipes;
         }
         setRecipes((oldRecipes) => newRecipes);
     }
