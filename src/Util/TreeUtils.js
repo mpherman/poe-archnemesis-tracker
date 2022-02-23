@@ -37,7 +37,13 @@ function getRequiredComponents(tree, components) {
 }
 
 function getRemainingComponents(tree, inventory, components) {
-    const monsters = Object.keys(tree);
+    let monsters;
+    if (Array.isArray(tree)) {
+        monsters = tree;
+    }
+    else {
+        monsters = Object.keys(tree);
+    }
     for (let i = 0; i < monsters.length; i++) {
         const monster = monsters[i];
         if (inventory[monster] > 0) {
