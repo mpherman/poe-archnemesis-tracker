@@ -52,6 +52,10 @@
 }
 
 .item-missing {
+    background-color: #de7a73;
+}
+
+.item-unsure {
     background-color: #bcc4cf;
 }
 

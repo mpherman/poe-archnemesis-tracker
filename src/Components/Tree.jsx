@@ -3,8 +3,25 @@ import React from 'react';
 import Monsters from '../Util/Monsters';
 import TreeUtils from '../Util/TreeUtils';
 
-function Leaf({ name, img, haveInInventory }) {
-    let className = haveInInventory ? 'item-completed' : 'item-missing';
+const MISSING = 0;
+const HAVE = 1;
+const HAVE_PARENT = 2;
+
+function Leaf({ name, img, status }) {
+    console.log(name, status);
+    let className;
+    switch (status) {
+        case MISSING:
+            className = 'item-missing';
+            break;
+        case HAVE:
+            className = 'item-completed';
+            break;
+        default:
+        case HAVE_PARENT:
+            className = 'item-unsure';
+            break;
+    }
     className += ' tree-item'
     return (
         <Grid container>
@@ -20,18 +37,29 @@ function Leaf({ name, img, haveInInventory }) {
     )
 }
 
-function Subtree({tree, inventory, depth}) {
+function Subtree({tree, inventory, haveParentInInventory, depth}) {
     if (Array.isArray(tree)) return (<React.Fragment></React.Fragment>)
     const monsters = Object.keys(tree);
     let subtrees = monsters.map((monster) => {
         const monsterInfo = Monsters[monster];
+        let status;
+        if (haveParentInInventory) {
+            status = HAVE_PARENT;
+        }
+        else if (inventory[monster] > 0) {
+            // Check for monster in inventory
+            status = HAVE;
+        } 
+        else {
+            status = MISSING;
+        }
         return (
         <React.Fragment>
             <Grid item xs={1}>
-                <Leaf name={monster} img={monsterInfo.img} haveInInventory={true} />
+                <Leaf name={monster} img={monsterInfo.img} status={status} />
             </Grid>
             <Grid item xs={depth-1}>
-                    <Subtree tree={tree[monster]} depth={depth-1} />
+                    <Subtree tree={tree[monster]} inventory={inventory} haveParentInInventory={haveParentInInventory || status === HAVE} depth={depth-1} />
                 </Grid>
         </React.Fragment>
         )
