@@ -1,4 +1,4 @@
-import { ButtonBase, Grid, Paper } from "@mui/material";
+import { ButtonBase, Grid, Paper, Typography } from "@mui/material";
 import Monsters from '../Util/Monsters';
 
 function Monster({name, img, rewards, collect}) {
@@ -36,9 +36,9 @@ function MissingPieces({missing, collectMonster}) {
     })
     return (
         <div className="monster-combo-box">
-            <h2>
+            <Typography display='inline' variant='h2'>
                 Missing Pieces
-            </h2>
+            </Typography>
             <Grid container spacing={6} p={0}>
                 {missingGrid}
             </Grid>

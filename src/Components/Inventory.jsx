@@ -104,9 +104,11 @@ function Inventory({inventory, updateInventory, addToCombo}) {
                         }
                     } />
             </Typography>
-            <Grid container spacing={6} p={0}>
-                {inventoryObjects}
-            </Grid>
+            <Typography variant='h6'>
+                <Grid container spacing={6} p={0}>
+                    {inventoryObjects}
+                </Grid>
+            </Typography>
         </div>
     );
 }

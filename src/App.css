@@ -27,6 +27,19 @@
 
 .inventory {
     min-height: 400px;
+    margin-top: 20px;
+}
+
+.recipe-section {
+    border: 1px solid black;
+    margin: 15px !important;
+}
+
+.recipe-section-title {
+    color: #000;
+    background-color: #bcc4cf;
+    padding: 20px;
+    margin-left: -15px;
 }
 
 .tooltip-tree {
@@ -120,7 +133,9 @@
 }
 
 .recipe-container {
-    margin-top: 20px !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+    padding-left: 20px;
 }
 
 .reward-icon {

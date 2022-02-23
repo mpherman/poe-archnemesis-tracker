@@ -1,4 +1,4 @@
-import { Grid, IconButton, Paper } from "@mui/material";
+import { Grid, IconButton, Paper, Typography, } from "@mui/material";
 import Monsters from '../Util/Monsters';
 import {
   MinusSquare
@@ -63,9 +63,9 @@ function Combo({combo, inventory, removeFromCombo, openTooltip}) {
     })
     return (
         <div className="monster-combo-box">
-            <h2>
+            <Typography display='inline' variant='h2'>
                 Combo
-            </h2>
+            </Typography>
             <Grid container spacing={6} p={0}>
                 {ComboPieces}
             </Grid>
