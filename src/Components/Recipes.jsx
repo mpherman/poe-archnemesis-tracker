@@ -1,4 +1,4 @@
-import { Grid, IconButton, Paper } from "@mui/material";
+import { Grid, IconButton, Paper, Typography } from "@mui/material";
 import Monsters from '../Util/Monsters';
 import {
   CheckSquare
@@ -37,16 +37,34 @@ function Recipe({monster, components, update}) {
     )
 }
 
+function RecipeSection({monster, recipes, update}) {
+    const recipeMonsters = Object.keys(recipes);
+    const recipeList = recipeMonsters.map((recipeMonster, index) => {
+        return <Recipe monster={recipeMonster} components={recipes[recipeMonster]} key={index} update={update}/>
+    })
+
+    return (
+        <div className="recipe-section">
+            <Typography variant="h5" className="recipe-section-title">
+                {monster}
+            </Typography>
+            <Typography variant="h6">
+                {recipeList}
+            </Typography>
+        </div>
+    )
+}
+
 function Recipes({recipes, update}) {
     const recipeMonsters = Object.keys(recipes);
     const recipeGrid = recipeMonsters.map((recipeMonster, index) => {
-        return <Recipe monster={recipeMonster} components={recipes[recipeMonster]} key={index} update={update}/>
+        return <RecipeSection monster={recipeMonster} recipes={recipes[recipeMonster]} key={index} update={update} />
     })
     return (
         <div className="monster-combo-box">
-            <h2>
+            <Typography display='inline' variant='h2'>
                 Active Recipes
-            </h2>
+            </Typography>
             {recipeGrid}
         </div>
     )
