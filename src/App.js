@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import './App.css';
-import { Grid } from "@mui/material";
+import { Backdrop, Grid, CircularProgress } from "@mui/material";
 import Inventory from './Components/Inventory';
 import Combo from './Components/Combo';
 import Recipes from './Components/Recipes';
@@ -79,6 +79,13 @@ function App() {
         newValue[name] = inventory[name] + 1;
         updateInventory(newValue);
     }
+    const [tooltipOpen, setTooltipOpen] = useState(false);
+    const closeTooltip = () => {
+        setTooltipOpen(false);
+    }
+    const openTooltip = (monster) => {
+        setTooltipOpen(true);
+    }
     return (
         <div className="App">
         <header className="App-header">
@@ -89,7 +96,7 @@ function App() {
         <div className="App-body">
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <Combo combo={combo} inventory={inventory} removeFromCombo={removeFromCombo}/>  
+                    <Combo combo={combo} inventory={inventory} removeFromCombo={removeFromCombo} openTooltip={openTooltip}/>  
                 </Grid>
                 <Grid item xs={12}>
                     <Recipes recipes={recipes} update={completeRecipe}/>  
@@ -101,6 +108,9 @@ function App() {
                     <Inventory inventory={inventory} updateInventory={updateInventory} addToCombo={addToCombo}/>  
                 </Grid>
             </Grid>
+            <Backdrop open={tooltipOpen} onClick={closeTooltip}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </div>
         </div>
     );
