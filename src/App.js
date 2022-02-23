@@ -1,9 +1,10 @@
 import { React, useState, useEffect } from 'react';
 import './App.css';
-import { Backdrop, Grid, CircularProgress } from "@mui/material";
+import { Backdrop, Grid } from "@mui/material";
 import Inventory from './Components/Inventory';
 import Combo from './Components/Combo';
 import Recipes from './Components/Recipes';
+import Tree from './Components/Tree';
 import BlankInventory from './Data/MonsterInventory.json';
 import TreeUtils from './Util/TreeUtils';
 import StorageUtils from './Data/StorageUtils';
@@ -80,11 +81,13 @@ function App() {
         updateInventory(newValue);
     }
     const [tooltipOpen, setTooltipOpen] = useState(false);
+    const [tooltipTree, setTooltipTree] = useState({});
     const closeTooltip = () => {
         setTooltipOpen(false);
     }
     const openTooltip = (monster) => {
         setTooltipOpen(true);
+        setTooltipTree(oldTree => TreeUtils.createMonsterTree(monster));
     }
     return (
         <div className="App">
@@ -109,7 +112,7 @@ function App() {
                 </Grid>
             </Grid>
             <Backdrop open={tooltipOpen} onClick={closeTooltip}>
-                <CircularProgress color="inherit" />
+                <Tree tree={tooltipTree} inventory={inventory}/>
             </Backdrop>
         </div>
         </div>

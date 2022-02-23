@@ -4,17 +4,22 @@ function isTierOne(monster) {
     return !MONSTER_RECIPES[monster];
 }
 
-function createMonsterTree(monster) {
+function createSubTree(monster) {
     if (isTierOne(monster)) {
         return [monster]
     }
     let recipe = MONSTER_RECIPES[monster];
     let monster_tree = {};
-    monster_tree[monster] = {}
     for (let i = 0; i < recipe.length; i++) {
         const recipeMonster = recipe[i];
-        monster_tree[monster][recipeMonster] = createMonsterTree(recipeMonster)
+        monster_tree[recipeMonster] = createSubTree(recipeMonster)
     }
+    return monster_tree;
+}
+
+function createMonsterTree(monster) {
+    let monster_tree = {};
+    monster_tree[monster] = createSubTree(monster);
     return monster_tree;
 }
 
@@ -88,6 +93,16 @@ function getRecipe(monster) {
     return MONSTER_RECIPES[monster];
 }
 
+function getTreeDepth(tree) {
+    if (Array.isArray(tree)) return 0;
+    const monsters = Object.keys(tree);
+    let depth = 0;
+    for (let i = 0; i < monsters.length; i++) {
+        depth = Math.max(depth, getTreeDepth(tree[monsters[i]]));
+    }
+    return depth + 1;
+}
+
 function copy(object) {
     return JSON.parse(JSON.stringify(object));
 }
@@ -100,6 +115,7 @@ const TreeUtils = {
     getActiveRecipes: getActiveRecipes,
     copy: copy,
     getRecipe: getRecipe,
+    getTreeDepth: getTreeDepth,
 }
 
 export default TreeUtils;
