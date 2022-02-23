@@ -8,7 +8,6 @@ const HAVE = 1;
 const HAVE_PARENT = 2;
 
 function Leaf({ name, img, status }) {
-    console.log(name, status);
     let className;
     switch (status) {
         case MISSING:
@@ -37,7 +36,7 @@ function Leaf({ name, img, status }) {
     )
 }
 
-function Subtree({tree, inventory, haveParentInInventory, depth}) {
+function Subtree({tree, inventory, haveParentInInventory, depth, ignoreStatus}) {
     if (Array.isArray(tree)) return (<React.Fragment></React.Fragment>)
     const monsters = Object.keys(tree);
     let subtrees = monsters.map((monster) => {
@@ -54,13 +53,13 @@ function Subtree({tree, inventory, haveParentInInventory, depth}) {
             status = MISSING;
         }
         return (
-        <React.Fragment>
+        <React.Fragment key={monster}>
             <Grid item xs={1}>
                 <Leaf name={monster} img={monsterInfo.img} status={status} />
             </Grid>
             <Grid item xs={depth-1}>
-                    <Subtree tree={tree[monster]} inventory={inventory} haveParentInInventory={haveParentInInventory || status === HAVE} depth={depth-1} />
-                </Grid>
+                <Subtree tree={tree[monster]} inventory={inventory} haveParentInInventory={!ignoreStatus && (haveParentInInventory || status === HAVE)} depth={depth-1} />
+            </Grid>
         </React.Fragment>
         )
     })
@@ -75,7 +74,7 @@ function Tree({ tree, inventory }) {
     const treeDepth = TreeUtils.getTreeDepth(tree);
     return (
         <div className="tooltip-tree">
-            <Subtree tree={tree} inventory={inventory} depth={treeDepth} />
+            <Subtree tree={tree} inventory={inventory} depth={treeDepth} ignoreStatus />
         </div>
     );
 }

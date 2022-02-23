@@ -17,7 +17,6 @@ function Monster({name, img, rewards, haveInInventory, removeFromCombo, openTool
         )
     });
     const handleTooltipClick = (event) => {
-        console.log(event);
         openTooltip(name);
     }
     const className = haveInInventory ? 'combo-grid-completed' : 'combo-grid-missing';

@@ -1,4 +1,5 @@
-import { Grid, Paper, Button, IconButton, } from "@mui/material";
+import React, { useState } from 'react';
+import { Grid, Paper, Button, IconButton, TextField, Typography, } from "@mui/material";
 import Monsters from '../Util/Monsters';
 import {
   ArrowUpCircle,
@@ -52,6 +53,10 @@ function Monster({name, img, count, add, subtract, addToCombo}) {
 }
 
 function Inventory({inventory, updateInventory, addToCombo}) {
+    const [searchString, setSearchString] = useState("");
+    function handleSearch(event) {
+        setSearchString(event.target.value);
+    }
     const monsterKeys = Object.keys(inventory);
     function add(name) {
         let updatedValue = {}
@@ -64,6 +69,11 @@ function Inventory({inventory, updateInventory, addToCombo}) {
         updateInventory(updatedValue);
     }
     const inventoryObjects = monsterKeys.map((monster) => {
+        if (!monster.toLowerCase().includes(searchString.toLowerCase())) {
+            return (
+                <React.Fragment key={monster}></React.Fragment>
+            )
+        }
         const imageSrc = Monsters[monster].img;
         const monsterCount = inventory[monster];
         return (
@@ -75,10 +85,25 @@ function Inventory({inventory, updateInventory, addToCombo}) {
         );
     });
     return (
-        <div>
-            <h2>
+        <div className="inventory">
+            <Typography display='inline' variant='h2'>
                 Inventory
-            </h2>
+            </Typography>
+            <Typography display='inline' variant='h6'>
+                <TextField 
+                    hiddenLabel
+                    id='inventory-filter' 
+                    placeholder='Search' 
+                    variant='outlined' 
+                    onChange={handleSearch} 
+                    style={
+                        {
+                            'fontColor': '#000',
+                            'backgroundColor': '#fff',
+                            'marginLeft': '40px'
+                        }
+                    } />
+            </Typography>
             <Grid container spacing={6} p={0}>
                 {inventoryObjects}
             </Grid>
