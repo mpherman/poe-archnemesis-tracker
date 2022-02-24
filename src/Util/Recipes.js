@@ -22,7 +22,7 @@ const MONSTER_RECIPES = {
     "Effigy": ["Hexer", "Malediction", "Corrupter"],
     "Crystal-Skinned": ["Rejuvenating", "Permafrost", "Berserker"],
     "Temporal Bubble": ["Juggernaut", "Hexer", "Arcane Buffer"],
-    "Empowered Elements": ["Evocationist", "Steel-infused", "Chaosweaver"],
+    "Empowered Elements": ["Evocationist", "Steel-Infused", "Chaosweaver"],
     "Trickster": ["Overcharged", "Assassin", "Echoist"],
     "Soul Eater": ["Necromancer", "Soul Conduit", "Gargantuan"],
     "Tukohama-touched": ["Bonebreaker", "Executioner", "Magma Barrier"],
