@@ -106,6 +106,45 @@ function ActiveCombo({combo, inventory, openTooltip, updateActiveCombo}) {
     )
 }
 
+function getComboDisplayName(combo) {
+    let display = '';
+    for (let i = 0; i < combo.length; i++) {
+        if (i !== 0) {
+            display += ', ';
+        }
+        display += combo[i]
+    }
+    return display;
+}
+
+function ComboList({combos, active}) {
+    function onComboSelection(event) {
+        console.log(event);
+    }
+    const comboOptions = combos.map((combo, index) => {
+        return (
+            <MenuItem value={index}>{getComboDisplayName(combo)}</MenuItem>
+        )
+    })
+    return (
+        <FormControl sx={{minWidth:120}}
+            style={
+                {
+                    'fontColor': '#000',
+                    'backgroundColor': '#fff',
+                    'marginLeft': '40px',
+                }
+            }>
+            <Select
+                onChange={onComboSelection}
+                displayEmpty
+            >
+                {comboOptions}
+            </Select>
+        </FormControl>
+    )
+}
+
 
 function Combos({combos, active, inventory, openTooltip, updateActiveCombo}) {
     return (
@@ -113,6 +152,7 @@ function Combos({combos, active, inventory, openTooltip, updateActiveCombo}) {
             <Typography display='inline' variant='h2'>
                 Combos
             </Typography>
+            <ComboList combos={combos} active={active}/>
             <ActiveCombo combo={active} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>
         </div>
     )
