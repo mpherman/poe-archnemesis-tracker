@@ -61,7 +61,7 @@ function Recipes({recipes, update}) {
         return <RecipeSection monster={recipeMonster} recipes={recipes[recipeMonster]} key={index} update={update} />
     })
     return (
-        <div className="monster-combo-box">
+        <div className="monster-recipe-box">
             <Typography display='inline' variant='h2'>
                 Active Recipes
             </Typography>

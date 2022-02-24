@@ -80,6 +80,11 @@
     min-height: calc(10px + 20vh);
 }
 
+.monster-recipe-box {
+    margin-top: 25px;
+    min-height: calc(10px + 20vh);
+}
+
 .monster-grid-item {
     padding: 5px;
     background-color: #bcc4cf;

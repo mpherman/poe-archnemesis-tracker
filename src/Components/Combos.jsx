@@ -1,13 +1,7 @@
-import { FormControl, Grid, IconButton, MenuItem, Paper, Select, Typography, } from "@mui/material";
+import { FormControl, Grid, MenuItem, Paper, Select, Typography, } from "@mui/material";
 import Monsters from '../Util/Monsters';
-import {
-  MinusSquare
-} from "react-feather";
 
-function Monster({name, img, rewards, haveInInventory, removeFromCombo, openTooltip}) {
-    function handleRemoveFromCombo(event) {
-        removeFromCombo(name);
-    }
+function Monster({name, img, rewards, haveInInventory, openTooltip}) {
     const rewardImages = rewards.map((reward, index) => {
         const rewardImg = "rewards/" + reward + ".png";
         return (
@@ -25,11 +19,6 @@ function Monster({name, img, rewards, haveInInventory, removeFromCombo, openTool
             <Grid item xs={2}>
                <Grid item xs={12}>
                     <img src={img} alt={name} />
-                </Grid>
-                <Grid className="monster-grid-button" item xs={12}>
-                    <IconButton onClick={handleRemoveFromCombo}>
-                        <MinusSquare className="monster-grid-combo-remove-button" />
-                    </IconButton>
                 </Grid>
             </Grid>
             <Grid container item={true} xs={10} onClick={handleTooltipClick}>
@@ -80,7 +69,14 @@ function ActiveCombo({combo, inventory, openTooltip, updateActiveCombo}) {
     const activeDropdowns = [0,1,2,3].map(x => {
         return (
             <Grid item xs={3} key={x}>
-                <FormControl sx={{minWidth:120}}>
+                <FormControl sx={{minWidth:120}}
+                    style={
+                        {
+                            'fontColor': '#000',
+                            'backgroundColor': '#fff',
+                            'marginLeft': '40px'
+                        }
+                    }>
                     <Select
                         onChange={dropdownChange}
                         displayEmpty

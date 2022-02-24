@@ -1,33 +1,24 @@
 import React, { useState } from 'react';
-import { Grid, Paper, Button, IconButton, TextField, Typography, } from "@mui/material";
+import { Grid, Paper, Button, TextField, Typography, } from "@mui/material";
 import Monsters from '../Util/Monsters';
 import {
   ArrowUpCircle,
   ArrowDownCircle,
-  PlusSquare
 } from "react-feather";
 
 
-function Monster({name, img, count, add, subtract, addToCombo}) {
+function Monster({name, img, count, add, subtract}) {
     function handleAdd(event) {
         add(name);
     };
     function handleSubtract(event) {
         subtract(name);
     }
-    function handleAddToCombo(event) {
-        addToCombo(name);
-    }
     return (
         <Grid className="monster-grid-item" container spacing={0}>
             <Grid item xs={2}>
                <Grid item xs={12}>
                     <img src={img} alt={name} />
-                </Grid>
-                <Grid className="monster-grid-button" item xs={12}>
-                    <IconButton onClick={handleAddToCombo}>
-                        <PlusSquare className="monster-grid-combo-button success" />
-                    </IconButton>
                 </Grid>
             </Grid>
             <Grid container item={true} xs={10}>
