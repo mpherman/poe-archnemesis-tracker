@@ -25,18 +25,6 @@ function App() {
         setInventory(inventory => newInventory);
         StorageUtils.save('inventory', newInventory);
     }
-    function addToCombo(name) {
-        if (combos[activeCombo].length >= 4) return;
-        if (combos[activeCombo].indexOf(name) !== -1) return;
-        let newCombo = [...combos[activeCombo], name];
-        setCombo(combo => newCombo);
-        StorageUtils.save('combo', newCombo);
-    }
-    function removeFromCombo(name) {
-        const newCombo = combos[activeCombo].filter(item => item !== name);
-        setCombo(combo => newCombo);
-        StorageUtils.save('combo', newCombo);
-    }
     function updateActiveCombo(combo) {
         const newActiveCombo = [...combo];
         setActiveCombo(x => newActiveCombo);
@@ -111,7 +99,7 @@ function App() {
         <div className="App-body">
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <Combos combos={combos} active={activeCombo} inventory={inventory} removeFromCombo={removeFromCombo} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>  
+                    <Combos combos={combos} active={activeCombo} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>  
                 </Grid>
                 <Grid item xs={12}>
                     <Recipes recipes={recipes} update={completeRecipe}/>  
@@ -120,7 +108,7 @@ function App() {
                     <MissingPieces missing={missing} collectMonster={collectMonster}/>  
                 </Grid>
                 <Grid item xs={12}>
-                    <Inventory inventory={inventory} updateInventory={updateInventory} addToCombo={addToCombo}/>  
+                    <Inventory inventory={inventory} updateInventory={updateInventory} />  
                 </Grid>
             </Grid>
             <Backdrop open={tooltipOpen} onClick={closeTooltip}>
