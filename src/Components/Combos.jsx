@@ -1,4 +1,5 @@
 import { FormControl, Grid, MenuItem, Paper, Select, Typography, } from "@mui/material";
+import React from 'react';
 import Monsters from '../Util/Monsters';
 
 function Monster({name, img, rewards, haveInInventory, openTooltip}) {
@@ -32,7 +33,7 @@ function Monster({name, img, rewards, haveInInventory, openTooltip}) {
 }
 
 function ActiveCombo({combo, inventory, openTooltip, updateActiveCombo}) {
-    const ComboPieces = combo.map((monster, index) => {
+    const ComboPieces = !combo ? <React.Fragment></React.Fragment> : combo.map((monster, index) => {
         if (!monster) {
             return (
                 <Grid item p={0} xs={3} key={index}>
@@ -107,7 +108,6 @@ function ActiveCombo({combo, inventory, openTooltip, updateActiveCombo}) {
 
 
 function Combos({combos, active, inventory, openTooltip, updateActiveCombo}) {
-
     return (
         <div className="monster-combo-box">
             <Typography display='inline' variant='h2'>

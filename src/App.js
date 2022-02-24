@@ -15,33 +15,40 @@ function App() {
     let loadedInventory =  StorageUtils.load('inventory', BlankInventory);
     const [inventory, setInventory] = useState(loadedInventory);
     // Load activeCombo
-    let loadedActiveCombo = StorageUtils.load('activeCombo', ['', '', '', '']);
-    const [activeCombo, setActiveCombo] = useState(loadedActiveCombo);
+    let loadedActiveCombo = StorageUtils.load('activeComboIndex', 0);
+    const [activeComboIndex, setActiveComboIndex] = useState(loadedActiveCombo);
     // Load combos from localStorage
-    let loadedCombos = StorageUtils.load('combos', [loadedActiveCombo]);
-    const [combos, setCombo] = useState(loadedCombos);
+    let loadedCombos = StorageUtils.load('combos', [['', '', '', '']]);
+    const [combos, setCombos] = useState(loadedCombos);
     function updateInventory(newValues) {
         const newInventory = { ...inventory, ...newValues };
         setInventory(inventory => newInventory);
         StorageUtils.save('inventory', newInventory);
     }
     function updateActiveCombo(combo) {
-        const newActiveCombo = [...combo];
-        setActiveCombo(x => newActiveCombo);
-        StorageUtils.save('activeCombo', newActiveCombo);
+        const newCombos = [...combos];
+        newCombos[activeComboIndex] = combo;
+        setCombos(x => newCombos);
+        StorageUtils.save('combos', newCombos);
+    }
+    function switchActiveCombo(index) {
+        setActiveComboIndex(index);
+        StorageUtils.save('activeComboIndex', index);
     }
 
     useEffect(() => {
         updateRecipes();
         updateMissing();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeCombo, inventory]);
+    }, [activeComboIndex, inventory]);
 
     // Get recipes
     const [recipes, setRecipes] = useState({});
     function updateRecipes() {
         let inventoryCopy = TreeUtils.copy(inventory);
         let newRecipes = {};
+        let activeCombo = combos[activeComboIndex];
+        if (!activeCombo) return;
         for (let i = 0; i < activeCombo.length; i++) {
             if (!activeCombo[i]) continue;
             const monster = activeCombo[i];
@@ -67,6 +74,8 @@ function App() {
     function updateMissing() {
         let remainingComponents = {};
         let inventoryCopy = TreeUtils.copy(inventory);
+        let activeCombo = combos[activeComboIndex];
+        if (!activeCombo) return;
         for (let i = 0; i < activeCombo.length; i++) {
             if (!activeCombo[i]) continue;
             const monster = activeCombo[i];
@@ -99,7 +108,7 @@ function App() {
         <div className="App-body">
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <Combos combos={combos} active={activeCombo} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>  
+                    <Combos combos={combos} active={combos[activeComboIndex]} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>  
                 </Grid>
                 <Grid item xs={12}>
                     <Recipes recipes={recipes} update={completeRecipe}/>  
