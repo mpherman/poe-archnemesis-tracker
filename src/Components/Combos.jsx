@@ -1,4 +1,4 @@
-import { Grid, IconButton, Paper, Typography, } from "@mui/material";
+import { FormControl, Grid, IconButton, MenuItem, Paper, Select, Typography, } from "@mui/material";
 import Monsters from '../Util/Monsters';
 import {
   MinusSquare
@@ -42,35 +42,84 @@ function Monster({name, img, rewards, haveInInventory, removeFromCombo, openTool
     )
 }
 
-
-function Combo({combo, inventory, removeFromCombo, openTooltip}) {
-    const ComboPieces = combo.map((monster) => {
+function ActiveCombo({combo, inventory, openTooltip, updateActiveCombo}) {
+    const ComboPieces = combo.map((monster, index) => {
+        if (!monster) {
+            return (
+                <Grid item p={0} xs={3} key={index}>
+                    <Paper elevation={3}>
+                    </Paper>
+                </Grid>
+            )
+        }
         const imageSrc = Monsters[monster].img;
         const rewards = Monsters[monster].rewards;
         return (
-            <Grid item p={0} xs={3} key={monster}>
+            <Grid item p={0} xs={3} key={index}>
                 <Paper elevation={3}>
                     <Monster 
                         name={monster} 
                         img={imageSrc} 
                         rewards={rewards} 
                         haveInInventory={inventory[monster] > 0} 
-                        removeFromCombo={removeFromCombo} 
+                        /*removeFromCombo={removeFromCombo}*/
                         openTooltip={openTooltip} />
                 </Paper>
             </Grid>
         );
+    });
+    function dropdownChange(event) {
+        combo[event.target.name] = event.target.value;
+        updateActiveCombo(combo);
+    }
+    const dropdownChoices = Object.keys(Monsters).map(monster => {
+        return (
+            <MenuItem value={monster}>{monster}</MenuItem>
+        )
     })
+    const activeDropdowns = [0,1,2,3].map(x => {
+        return (
+            <Grid item xs={3} key={x}>
+                <FormControl sx={{minWidth:120}}>
+                    <Select
+                        onChange={dropdownChange}
+                        displayEmpty
+                        name={''+x}
+                        id={x}
+                        defaultValue=""
+                    >
+                        <MenuItem value="">
+                            None
+                        </MenuItem>
+                        {dropdownChoices}
+                    </Select>
+                </FormControl>
+            </Grid>
+        )
+    })
+    return (
+        <Grid container spacing={6} p={0}>
+            <Grid container item xs={12}>
+                {ComboPieces}
+            </Grid>
+            <Grid container item xs={12}>
+                {activeDropdowns}
+            </Grid>
+        </Grid>
+    )
+}
+
+
+function Combos({combos, active, inventory, openTooltip, updateActiveCombo}) {
+
     return (
         <div className="monster-combo-box">
             <Typography display='inline' variant='h2'>
-                Combo
+                Combos
             </Typography>
-            <Grid container spacing={6} p={0}>
-                {ComboPieces}
-            </Grid>
+            <ActiveCombo combo={active} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>
         </div>
     )
 }
 
-export default Combo;
+export default Combos;

@@ -29,7 +29,7 @@ const Monsters = {
         "img": "monsters/bonebreaker.png",
         "rewards": [
             "random",
-            "weapon"
+            "weapons"
         ],
     },
     "Chaosweaver": {
@@ -334,7 +334,7 @@ const Monsters = {
     "Temporal Bubble": {
         "img": "monsters/temporal-bubble.png",
         "rewards": [
-            "height",
+            "heist",
             "expedition"
         ],
     },
@@ -386,7 +386,7 @@ const Monsters = {
     "Lunaris-touched": {
         "img": "monsters/lunaris-touched.png",
         "rewards": [
-            "unqiues"
+            "uniques"
         ],
     },
     "Solaris-touched": {

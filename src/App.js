@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react';
 import './App.css';
 import { Backdrop, Grid } from "@mui/material";
 import Inventory from './Components/Inventory';
-import Combo from './Components/Combo';
+import Combos from './Components/Combos';
 import Recipes from './Components/Recipes';
 import Tree from './Components/Tree';
 import BlankInventory from './Data/MonsterInventory.json';
@@ -14,40 +14,49 @@ function App() {
     // Load inventory from localStorage
     let loadedInventory =  StorageUtils.load('inventory', BlankInventory);
     const [inventory, setInventory] = useState(loadedInventory);
-    // Load combo from localStorage
-    let loadedCombo = StorageUtils.load('combo', []);
-    const [combo, setCombo] = useState(loadedCombo);
+    // Load activeCombo
+    let loadedActiveCombo = StorageUtils.load('activeCombo', ['', '', '', '']);
+    const [activeCombo, setActiveCombo] = useState(loadedActiveCombo);
+    // Load combos from localStorage
+    let loadedCombos = StorageUtils.load('combos', [loadedActiveCombo]);
+    const [combos, setCombo] = useState(loadedCombos);
     function updateInventory(newValues) {
         const newInventory = { ...inventory, ...newValues };
         setInventory(inventory => newInventory);
         StorageUtils.save('inventory', newInventory);
     }
     function addToCombo(name) {
-        if (combo.length >= 4) return;
-        if (combo.indexOf(name) !== -1) return;
-        let newCombo = [...combo, name];
+        if (combos[activeCombo].length >= 4) return;
+        if (combos[activeCombo].indexOf(name) !== -1) return;
+        let newCombo = [...combos[activeCombo], name];
         setCombo(combo => newCombo);
         StorageUtils.save('combo', newCombo);
     }
     function removeFromCombo(name) {
-        const newCombo = combo.filter(item => item !== name);
+        const newCombo = combos[activeCombo].filter(item => item !== name);
         setCombo(combo => newCombo);
         StorageUtils.save('combo', newCombo);
+    }
+    function updateActiveCombo(combo) {
+        const newActiveCombo = [...combo];
+        setActiveCombo(x => newActiveCombo);
+        StorageUtils.save('activeCombo', newActiveCombo);
     }
 
     useEffect(() => {
         updateRecipes();
         updateMissing();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [combo, inventory]);
+    }, [activeCombo, inventory]);
 
     // Get recipes
     const [recipes, setRecipes] = useState({});
     function updateRecipes() {
         let inventoryCopy = TreeUtils.copy(inventory);
         let newRecipes = {};
-        for (let i = 0; i < combo.length; i++) {
-            const monster = combo[i];
+        for (let i = 0; i < activeCombo.length; i++) {
+            if (!activeCombo[i]) continue;
+            const monster = activeCombo[i];
             const tree = TreeUtils.createMonsterTree(monster);
             let monsterRecipes = {}
             TreeUtils.getActiveRecipes(tree, inventoryCopy, monsterRecipes);
@@ -70,8 +79,9 @@ function App() {
     function updateMissing() {
         let remainingComponents = {};
         let inventoryCopy = TreeUtils.copy(inventory);
-        for (let i = 0; i < combo.length; i++) {
-            const monster = combo[i];
+        for (let i = 0; i < activeCombo.length; i++) {
+            if (!activeCombo[i]) continue;
+            const monster = activeCombo[i];
             const tree = TreeUtils.createMonsterTree(monster);
             TreeUtils.getRemainingComponents(tree, inventoryCopy, remainingComponents);
         }
@@ -101,7 +111,7 @@ function App() {
         <div className="App-body">
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <Combo combo={combo} inventory={inventory} removeFromCombo={removeFromCombo} openTooltip={openTooltip}/>  
+                    <Combos combos={combos} active={activeCombo} inventory={inventory} removeFromCombo={removeFromCombo} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>  
                 </Grid>
                 <Grid item xs={12}>
                     <Recipes recipes={recipes} update={completeRecipe}/>  
