@@ -112,6 +112,7 @@ function getComboDisplayName(combo, inventory) {
     let display = '';
     let completed = true;
     let isNotEmpty = false;
+    let inventoryCopy = TreeUtils.copy(inventory);
     for (let i = 0; i < combo.length; i++) {
         if (i !== 0) {
             display += ', ';
@@ -120,7 +121,7 @@ function getComboDisplayName(combo, inventory) {
         if (combo[i] && completed) {
             // Only run this check if there is a monster and the rest of the combo is completed
             let remaining = {};
-            TreeUtils.getRemainingComponents(TreeUtils.createMonsterTree(combo[i]), TreeUtils.copy(inventory), remaining);
+            TreeUtils.getRemainingComponents(TreeUtils.createMonsterTree(combo[i]), inventoryCopy, remaining);
             if (Object.keys(remaining).length !== 0) {
                 completed = false;
             }
