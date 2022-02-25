@@ -31,8 +31,22 @@ function App() {
         setCombos(x => newCombos);
         StorageUtils.save('combos', newCombos);
     }
+    function addBlankCombo() {
+        const newCombos = [...combos];
+        newCombos[newCombos.length] = ['', '', '', ''];
+        setCombos(x => newCombos);
+        StorageUtils.save('combos', newCombos);
+    }
     function switchActiveCombo(index) {
-        setActiveComboIndex(index);
+        if (index === -1) {
+            // Add new combo
+            index = combos.length;
+            setActiveComboIndex(index);
+            addBlankCombo()
+        }
+        else {
+            setActiveComboIndex(index);
+        }
         StorageUtils.save('activeComboIndex', index);
     }
 
@@ -40,7 +54,7 @@ function App() {
         updateRecipes();
         updateMissing();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeComboIndex, inventory]);
+    }, [activeComboIndex, combos, inventory]);
 
     // Get recipes
     const [recipes, setRecipes] = useState({});
@@ -108,7 +122,7 @@ function App() {
         <div className="App-body">
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <Combos combos={combos} active={combos[activeComboIndex]} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>  
+                    <Combos combos={combos} activeComboIndex={activeComboIndex} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo} switchActiveCombo={switchActiveCombo}/>  
                 </Grid>
                 <Grid item xs={12}>
                     <Recipes recipes={recipes} update={completeRecipe}/>  
