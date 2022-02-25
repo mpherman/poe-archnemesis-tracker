@@ -58,6 +58,17 @@ function App() {
         StorageUtils.save('activeComboIndex', newIndex);
         StorageUtils.save('combos', newCombos);
     }
+    function completeActiveCombo() {
+        let activeCombo = combos[activeComboIndex];
+        let newValues = {};
+        for (let i = 0; i < activeCombo.length; i++) {
+            const monster = activeCombo[i];
+            if (monster) {
+                newValues[monster] = inventory[monster] - 1;
+            }
+        }
+        updateInventory(newValues);
+    }
 
     useEffect(() => {
         updateRecipes();
@@ -138,7 +149,8 @@ function App() {
                         openTooltip={openTooltip} 
                         updateActiveCombo={updateActiveCombo} 
                         switchActiveCombo={switchActiveCombo}
-                        removeActiveCombo={removeActiveCombo} />  
+                        removeActiveCombo={removeActiveCombo}
+                        completeActiveCombo = {completeActiveCombo} />  
                 </Grid>
                 <Grid item xs={12}>
                     <Recipes recipes={recipes} update={completeRecipe}/>  
