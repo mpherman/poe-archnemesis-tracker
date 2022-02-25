@@ -167,10 +167,13 @@ function ComboList({combos, active, inventory, switchActiveCombo}) {
 }
 
 
-function Combos({combos, activeComboIndex, inventory, openTooltip, updateActiveCombo, switchActiveCombo, removeActiveCombo}) {
+function Combos({combos, activeComboIndex, inventory, openTooltip, updateActiveCombo, switchActiveCombo, removeActiveCombo, completeActiveCombo}) {
     const active = combos[activeComboIndex];
     function handleRemoveCombo(event) {
         removeActiveCombo();
+    }
+    function handleCompleteCombo(event) {
+        completeActiveCombo();
     }
     return (
         <div className="monster-combo-box">
@@ -180,9 +183,12 @@ function Combos({combos, activeComboIndex, inventory, openTooltip, updateActiveC
             <ComboList combos={combos} active={activeComboIndex} switchActiveCombo={switchActiveCombo} inventory={inventory}/>
             {combos.length > 1 &&
                 <Button variant="contained" className="monster-grid-combo-remove-button" onClick={handleRemoveCombo}>
-                 Remove
+                    Remove
                 </Button>
             }
+            <Button variant="contained" className="monster-grid-combo-remove-button" onClick={handleCompleteCombo}>
+                Complete
+            </Button>
             <ActiveCombo combo={active} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>
         </div>
     )
