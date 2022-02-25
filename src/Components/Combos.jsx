@@ -64,7 +64,7 @@ function ActiveCombo({combo, inventory, openTooltip, updateActiveCombo}) {
     }
     const dropdownChoices = Object.keys(Monsters).map(monster => {
         return (
-            <MenuItem value={monster}>{monster}</MenuItem>
+            <MenuItem key={monster} value={monster}>{monster}</MenuItem>
         )
     })
     const activeDropdowns = [0,1,2,3].map(x => {
@@ -82,8 +82,9 @@ function ActiveCombo({combo, inventory, openTooltip, updateActiveCombo}) {
                         onChange={dropdownChange}
                         displayEmpty
                         name={''+x}
-                        id={x}
+                        id={''+x}
                         defaultValue=""
+                        value={combo[x] || ""}
                     >
                         <MenuItem value="">
                             None
@@ -112,18 +113,18 @@ function getComboDisplayName(combo) {
         if (i !== 0) {
             display += ', ';
         }
-        display += combo[i]
+        display += combo[i] ? combo[i] : 'None';
     }
     return display;
 }
 
-function ComboList({combos, active}) {
+function ComboList({combos, active, switchActiveCombo}) {
     function onComboSelection(event) {
-        console.log(event);
+        switchActiveCombo(event.target.value);
     }
     const comboOptions = combos.map((combo, index) => {
         return (
-            <MenuItem value={index}>{getComboDisplayName(combo)}</MenuItem>
+            <MenuItem key={index} value={index}>{getComboDisplayName(combo)}</MenuItem>
         )
     })
     return (
@@ -138,7 +139,9 @@ function ComboList({combos, active}) {
             <Select
                 onChange={onComboSelection}
                 displayEmpty
+                value={active}
             >
+                <MenuItem key={-1} value={-1}>New Combo</MenuItem>
                 {comboOptions}
             </Select>
         </FormControl>
@@ -146,13 +149,14 @@ function ComboList({combos, active}) {
 }
 
 
-function Combos({combos, active, inventory, openTooltip, updateActiveCombo}) {
+function Combos({combos, activeComboIndex, inventory, openTooltip, updateActiveCombo, switchActiveCombo}) {
+    const active = combos[activeComboIndex];
     return (
         <div className="monster-combo-box">
             <Typography display='inline' variant='h2'>
                 Combos
             </Typography>
-            <ComboList combos={combos} active={active}/>
+            <ComboList combos={combos} active={activeComboIndex} switchActiveCombo={switchActiveCombo}/>
             <ActiveCombo combo={active} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>
         </div>
     )
