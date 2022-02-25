@@ -63,7 +63,7 @@ function ActiveCombo({combo, inventory, openTooltip, updateActiveCombo}) {
         combo[event.target.name] = event.target.value;
         updateActiveCombo(combo);
     }
-    const dropdownChoices = Object.keys(Monsters).map(monster => {
+    const dropdownChoices = Object.keys(Monsters).sort().map(monster => {
         return (
             <MenuItem key={monster} value={monster}>{monster}</MenuItem>
         )
