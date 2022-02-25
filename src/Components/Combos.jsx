@@ -1,6 +1,7 @@
 import { FormControl, Grid, MenuItem, Paper, Select, Typography, } from "@mui/material";
 import React from 'react';
 import Monsters from '../Util/Monsters';
+import TreeUtils from "../Util/TreeUtils";
 
 function Monster({name, img, rewards, haveInInventory, openTooltip}) {
     const rewardImages = rewards.map((reward, index) => {
@@ -107,24 +108,40 @@ function ActiveCombo({combo, inventory, openTooltip, updateActiveCombo}) {
     )
 }
 
-function getComboDisplayName(combo) {
+function getComboDisplayName(combo, inventory) {
     let display = '';
+    let completed = true;
+    let isNotEmpty = false;
     for (let i = 0; i < combo.length; i++) {
         if (i !== 0) {
             display += ', ';
         }
         display += combo[i] ? combo[i] : 'None';
+        if (combo[i] && completed) {
+            // Only run this check if there is a monster and the rest of the combo is completed
+            let remaining = {};
+            TreeUtils.getRemainingComponents(TreeUtils.createMonsterTree(combo[i]), TreeUtils.copy(inventory), remaining);
+            if (Object.keys(remaining).length !== 0) {
+                completed = false;
+            }
+        }
+        if (combo[i]) {
+            isNotEmpty = true;
+        }
+    }
+    if (completed && isNotEmpty) {
+        display = "* " + display;
     }
     return display;
 }
 
-function ComboList({combos, active, switchActiveCombo}) {
+function ComboList({combos, active, inventory, switchActiveCombo}) {
     function onComboSelection(event) {
         switchActiveCombo(event.target.value);
     }
     const comboOptions = combos.map((combo, index) => {
         return (
-            <MenuItem key={index} value={index}>{getComboDisplayName(combo)}</MenuItem>
+            <MenuItem key={index} value={index}>{getComboDisplayName(combo, inventory)}</MenuItem>
         )
     })
     return (
@@ -156,7 +173,7 @@ function Combos({combos, activeComboIndex, inventory, openTooltip, updateActiveC
             <Typography display='inline' variant='h2'>
                 Combos
             </Typography>
-            <ComboList combos={combos} active={activeComboIndex} switchActiveCombo={switchActiveCombo}/>
+            <ComboList combos={combos} active={activeComboIndex} switchActiveCombo={switchActiveCombo} inventory={inventory}/>
             <ActiveCombo combo={active} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>
         </div>
     )
