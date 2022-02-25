@@ -49,6 +49,15 @@ function App() {
         }
         StorageUtils.save('activeComboIndex', index);
     }
+    function removeActiveCombo() {
+        let newIndex = Math.max(activeComboIndex-1, 0);
+        let newCombos = [...combos];
+        newCombos.splice(activeComboIndex, 1);
+        setCombos(x => newCombos);
+        setActiveComboIndex(newIndex);
+        StorageUtils.save('activeComboIndex', newIndex);
+        StorageUtils.save('combos', newCombos);
+    }
 
     useEffect(() => {
         updateRecipes();
@@ -122,7 +131,14 @@ function App() {
         <div className="App-body">
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <Combos combos={combos} activeComboIndex={activeComboIndex} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo} switchActiveCombo={switchActiveCombo}/>  
+                    <Combos 
+                        combos={combos} 
+                        activeComboIndex={activeComboIndex} 
+                        inventory={inventory} 
+                        openTooltip={openTooltip} 
+                        updateActiveCombo={updateActiveCombo} 
+                        switchActiveCombo={switchActiveCombo}
+                        removeActiveCombo={removeActiveCombo} />  
                 </Grid>
                 <Grid item xs={12}>
                     <Recipes recipes={recipes} update={completeRecipe}/>  

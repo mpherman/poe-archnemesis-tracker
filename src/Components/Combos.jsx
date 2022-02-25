@@ -1,4 +1,4 @@
-import { FormControl, Grid, MenuItem, Paper, Select, Typography, } from "@mui/material";
+import { Button, FormControl, Grid, MenuItem, Paper, Select, Typography, } from "@mui/material";
 import React from 'react';
 import Monsters from '../Util/Monsters';
 import TreeUtils from "../Util/TreeUtils";
@@ -85,7 +85,7 @@ function ActiveCombo({combo, inventory, openTooltip, updateActiveCombo}) {
                         name={''+x}
                         id={''+x}
                         defaultValue=""
-                        value={combo[x] || ""}
+                        value={!combo ? "" : combo[x] || ""}
                     >
                         <MenuItem value="">
                             None
@@ -166,14 +166,22 @@ function ComboList({combos, active, inventory, switchActiveCombo}) {
 }
 
 
-function Combos({combos, activeComboIndex, inventory, openTooltip, updateActiveCombo, switchActiveCombo}) {
+function Combos({combos, activeComboIndex, inventory, openTooltip, updateActiveCombo, switchActiveCombo, removeActiveCombo}) {
     const active = combos[activeComboIndex];
+    function handleRemoveCombo(event) {
+        removeActiveCombo();
+    }
     return (
         <div className="monster-combo-box">
             <Typography display='inline' variant='h2'>
                 Combos
             </Typography>
             <ComboList combos={combos} active={activeComboIndex} switchActiveCombo={switchActiveCombo} inventory={inventory}/>
+            {combos.length > 1 &&
+                <Button variant="contained" className="monster-grid-combo-remove-button" onClick={handleRemoveCombo}>
+                 Remove
+                </Button>
+            }
             <ActiveCombo combo={active} inventory={inventory} openTooltip={openTooltip} updateActiveCombo={updateActiveCombo}/>
         </div>
     )
