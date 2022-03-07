@@ -25,6 +25,30 @@
   padding: 0px 50px;
 }
 
+.io-panel {
+    position: absolute;
+    right: 0;
+    margin-right: 75px;
+}
+
+.io-button {
+    margin-left: 10px !important;
+    background-color: #bcc4cf !important;
+    color: #000 !important;
+}
+
+.io-success {
+    border: 1px solid #bdeb88;
+}
+
+.io-failure {
+    border: 1px solid #de7a73;
+}
+
+.io-neutral {
+    border: 1px solid #bcc4cf;
+}
+
 .inventory {
     min-height: 400px;
     margin-top: 20px;
@@ -74,6 +98,18 @@
 
 .item-neutral {
     background-color: #bcc4cf;
+}
+
+.text-success {
+    color: #bdeb88;
+}
+
+.text-failure {
+    color: #de7a73;
+}
+
+.text-neutral {
+    color: #bcc4cf;
 }
 
 .monster-combo-box {

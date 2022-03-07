@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from 'react';
 import './App.css';
-import { Backdrop, Grid } from "@mui/material";
+import { Backdrop, Grid, Button, Typography, Dialog, DialogContent, DialogTitle, DialogContentText, IconButton, OutlinedInput, InputAdornment, Tooltip } from "@mui/material";
+import { Copy, Download, CheckSquare } from 'react-feather';
 import Inventory from './Components/Inventory';
 import Combos from './Components/Combos';
 import Recipes from './Components/Recipes';
@@ -139,6 +140,7 @@ function App() {
         newValue[name] = inventory[name] + 1;
         updateInventory(newValue);
     }
+    // Tooltip
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const [tooltipTree, setTooltipTree] = useState({});
     const closeTooltip = () => {
@@ -148,40 +150,154 @@ function App() {
         setTooltipOpen(true);
         setTooltipTree(oldTree => TreeUtils.createMonsterTree(monster));
     }
+
+    // Import/export popup
+    const [importOpen, setImportOpen] = useState(false);
+    const [exportOpen, setExportOpen] = useState(false);
+    const [exportCode, setExportCode] = useState("");
+    const [exportCopied, setExportCopied] = useState(false);
+    const [importError, setImportError] = useState(false);
+    let importCode = "";
+    const handleImportClick = (event) => {
+        setImportOpen(true);
+        setImportError(false);
+        importCode = "";
+    }   
+    const handleExportClick = (event) => {
+        setExportOpen(true);
+        setExportCode(TreeUtils.getExportCode(inventory));
+        setExportCopied(false);
+        console.log(exportCode, TreeUtils.getExportCode(inventory))
+    }
+    const handleImportClose = () => {
+        setImportOpen(false);
+    }
+    const handleExportClose = () => {
+        setExportOpen(false);
+    }
+    const handleImport = (event) => {
+        console.log(importCode);
+        setImportError(true);
+    }
+    const updateImportCode = (event) => {
+        importCode = event.target.value;
+    }
+    const handleExport = (event) => {
+        navigator.clipboard.writeText(exportCode).then(() => {
+            setExportCopied(true);
+        });
+    }
     return (
         <div className="App">
-        <header className="App-header">
-            <h1>
-                Archnemesis Tracker
-            </h1>
-        </header>
-        <div className="App-body">
-            <Grid container spacing={0}>
-                <Grid item xs={12}>
-                    <Combos 
-                        combos={combos} 
-                        activeComboIndex={activeComboIndex} 
-                        inventory={inventory} 
-                        openTooltip={openTooltip} 
-                        updateActiveCombo={updateActiveCombo} 
-                        switchActiveCombo={switchActiveCombo}
-                        removeActiveCombo={removeActiveCombo}
-                        completeActiveCombo = {completeActiveCombo} />  
+            <header className="App-header">
+                <h1>
+                    Archnemesis Tracker
+                </h1>
+                <div className="io-panel">
+                    <Typography variant='body1'>
+                        <Button className='io-button' variant="contained" onClick={handleImportClick}>
+                            Import
+                        </Button>
+                        <Button className='io-button' variant="contained" onClick={handleExportClick}>
+                            Export
+                        </Button>
+                    </Typography>
+                </div>
+            </header>
+            <div className="App-body">
+                <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                        <Combos 
+                            combos={combos} 
+                            activeComboIndex={activeComboIndex} 
+                            inventory={inventory} 
+                            openTooltip={openTooltip} 
+                            updateActiveCombo={updateActiveCombo} 
+                            switchActiveCombo={switchActiveCombo}
+                            removeActiveCombo={removeActiveCombo}
+                            completeActiveCombo = {completeActiveCombo} />  
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Recipes recipes={recipes} update={completeRecipe}/>  
+                    </Grid>
+                    <Grid item xs={12}>
+                        <MissingPieces missing={missing} collectMonster={collectMonster}/>  
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Inventory inventory={inventory} updateInventory={updateInventory} required={required}/>  
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <Recipes recipes={recipes} update={completeRecipe}/>  
-                </Grid>
-                <Grid item xs={12}>
-                    <MissingPieces missing={missing} collectMonster={collectMonster}/>  
-                </Grid>
-                <Grid item xs={12}>
-                    <Inventory inventory={inventory} updateInventory={updateInventory} required={required}/>  
-                </Grid>
-            </Grid>
-            <Backdrop open={tooltipOpen} onClick={closeTooltip}>
-                <Tree tree={tooltipTree} inventory={inventory}/>
-            </Backdrop>
-        </div>
+                <Backdrop open={tooltipOpen} onClick={closeTooltip}>
+                    <Tree tree={tooltipTree} inventory={inventory}/>
+                </Backdrop>
+                <Dialog open={importOpen} onClose={handleImportClose}>
+                    <DialogTitle>Import</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            To import your archnemesis inventory, paste in the code below:
+                        </DialogContentText>
+                        <br/>                
+                        <OutlinedInput
+                            autoFocus
+                            margin="dense"
+                            id="import-code"
+                            type="text"
+                            fullWidth
+                            onChange={updateImportCode} 
+                            className={importError ? 'io-failure' : 'io-neutral'}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <Tooltip title="Import">
+                                        <IconButton
+                                            aria-label="import code"
+                                            onClick={handleImport}
+                                            edge="end"
+                                        >
+                                            <Download />
+                                        </IconButton>
+                                    </Tooltip>
+                                </InputAdornment>
+                                }
+                        />
+                        { importError && <Typography variant='title' className='text-failure'>
+                        <br/>Error Importing Code</Typography>}
+                    </DialogContent>
+                </Dialog>
+                <Dialog open={exportOpen} onClose={handleExportClose}>
+                    <DialogTitle>Export</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            To export your archnemesis inventory, copy the code below:
+                        </DialogContentText>
+                        <br/>
+                        <OutlinedInput
+                            autoFocus
+                            margin="dense"
+                            id="export-code"
+                            label="Code"
+                            type="text"
+                            fullWidth
+                            value={exportCode}
+                            disabled
+                            className={exportCopied ? 'io-success' : 'io-neutral'}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <Tooltip title={exportCopied ? "Copied!" : "Copy to Clipboard"}>
+                                        <IconButton
+                                            aria-label="export code"
+                                            onClick={handleExport}
+                                            edge="end"
+                                            className={exportCopied ? "success" : "item-neutral"}
+                                        >
+                                            {exportCopied ? <CheckSquare /> : <Copy />}
+                                        </IconButton>
+                                    </Tooltip>
+                                </InputAdornment>
+                                }
+                        />
+                    </DialogContent>
+                </Dialog>
+            </div>
         </div>
     );
 }
