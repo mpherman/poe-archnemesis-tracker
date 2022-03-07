@@ -11,14 +11,14 @@ function Leaf({ name, img, status }) {
     let className;
     switch (status) {
         case MISSING:
-            className = 'item-missing';
+            className = 'item-failure';
             break;
         case HAVE:
-            className = 'item-completed';
+            className = 'item-success';
             break;
         default:
         case HAVE_PARENT:
-            className = 'item-unsure';
+            className = 'item-neutral';
             break;
     }
     className += ' tree-item'

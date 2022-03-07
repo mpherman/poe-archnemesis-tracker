@@ -10,7 +10,7 @@ function Recipe({monster, components, update}) {
         return (
             <Grid item xs={3} key={index}>
                 <Paper elevation={3}>
-                    <div className="monster-grid-item">
+                    <div className="monster-grid-item item-neutral">
                         {component}
                         <img className="monster-image" src={Monsters[component].img} alt={component} />
                     </div>
