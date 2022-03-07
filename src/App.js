@@ -167,7 +167,6 @@ function App() {
         setExportOpen(true);
         setExportCode(TreeUtils.getExportCode(inventory));
         setExportCopied(false);
-        console.log(exportCode, TreeUtils.getExportCode(inventory))
     }
     const handleImportClose = () => {
         setImportOpen(false);
@@ -176,8 +175,13 @@ function App() {
         setExportOpen(false);
     }
     const handleImport = (event) => {
-        console.log(importCode);
-        setImportError(true);
+        if (!TreeUtils.isValidImportCode(importCode)) {
+            setImportError(true);
+        }
+        else {
+            setImportOpen(false);
+            updateInventory(TreeUtils.getImportedInventory(importCode));
+        }
     }
     const updateImportCode = (event) => {
         importCode = event.target.value;
