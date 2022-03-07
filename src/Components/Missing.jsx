@@ -1,7 +1,7 @@
 import { ButtonBase, Grid, Paper, Typography } from "@mui/material";
 import Monsters from '../Util/Monsters';
 
-function Monster({name, img, rewards, collect}) {
+function Monster({name, img, collect, count}) {
     function handleCollect(event) {
         collect(name);
     }
@@ -14,7 +14,7 @@ function Monster({name, img, rewards, collect}) {
                     </Grid>
                 </Grid>
                 <Grid className="monster-grid-title" item xs={10}>
-                    {name}
+                    {name} ({count})
                 </Grid>
             </ButtonBase>
         </Grid>
@@ -29,7 +29,7 @@ function MissingPieces({missing, collectMonster}) {
         return (
             <Grid item p={0} xs={3} key={monster}>
                 <Paper elevation={3}>
-                    <Monster name={monster} img={imageSrc} collect={collectMonster}/>
+                    <Monster name={monster} img={imageSrc} collect={collectMonster} count={missing[monster]}/>
                 </Paper>
             </Grid>
         );
