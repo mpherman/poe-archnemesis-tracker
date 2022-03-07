@@ -105,6 +105,10 @@ function copy(object) {
     return JSON.parse(JSON.stringify(object));
 }
 
+function getExportCode(inventory) {
+    return 'code';
+}
+
 
 const TreeUtils = {
     createMonsterTree: createMonsterTree,
@@ -114,6 +118,7 @@ const TreeUtils = {
     copy: copy,
     getRecipe: getRecipe,
     getTreeDepth: getTreeDepth,
+    getExportCode: getExportCode,
 }
 
 export default TreeUtils;
