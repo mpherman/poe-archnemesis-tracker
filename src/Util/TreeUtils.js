@@ -1,4 +1,5 @@
 import MONSTER_RECIPES from './Recipes';
+import BlankInventory from '../Data/MonsterInventory'
 
 function isTierOne(monster) {
     return !MONSTER_RECIPES[monster];
@@ -106,7 +107,37 @@ function copy(object) {
 }
 
 function getExportCode(inventory) {
-    return 'code';
+    return JSON.stringify(inventory);
+}
+
+function isValidImportCode(code) {
+    let newInventory;
+    try {
+        newInventory = JSON.parse(code);
+    }
+    catch (error) {
+        return false;
+    }
+    if (typeof newInventory !== 'object') return false;
+    let defaultMonsters = Object.keys(BlankInventory);
+    let newMonsters = Object.keys(newInventory);
+    if (defaultMonsters.length !== newMonsters.length) return false;
+    for (let i = 0; i < defaultMonsters.length; i++) {
+        const monster = defaultMonsters[i];
+        // Monster must exist
+        if (newInventory[monster] === undefined) return false;
+        // Monster must be a number
+        if (typeof newInventory[monster] !== 'number') return false;
+        // Monster must be an integer
+        if (!Number.isInteger(newInventory[monster])) return false;
+        // Monster must be a positive value less than 64
+        if (newInventory[monster] < 0 || newInventory[monster] > 64) return false;
+    }
+    return true;
+}
+
+function getImportedInventory(code) {
+    return JSON.parse(code);
 }
 
 
@@ -119,6 +150,8 @@ const TreeUtils = {
     getRecipe: getRecipe,
     getTreeDepth: getTreeDepth,
     getExportCode: getExportCode,
+    isValidImportCode: isValidImportCode,
+    getImportedInventory: getImportedInventory,
 }
 
 export default TreeUtils;
