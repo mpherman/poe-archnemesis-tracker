@@ -27,15 +27,13 @@ function getRequiredComponents(tree, components) {
     const monsters = Object.keys(tree);
     for (let i = 0; i < monsters.length; i++) {
         const monster = monsters[i];
-        if (isTierOne(monster)) {
-            if (!components[monster]) {
-                components[monster] = 1;
-            }
-            else {
-                components[monster]++;
-            }
+        if (!components[monster]) {
+            components[monster] = 1;
         }
         else {
+            components[monster]++;
+        }
+        if (!isTierOne(monster)) {
             getRequiredComponents(tree[monster], components);
         }
     }

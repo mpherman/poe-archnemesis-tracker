@@ -73,6 +73,7 @@ function App() {
     useEffect(() => {
         updateRecipes();
         updateMissing();
+        updateRequired();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeComboIndex, combos, inventory]);
 
@@ -101,6 +102,21 @@ function App() {
         }
         newInventoryValues[monster] = inventory[monster] + 1;
         updateInventory(newInventoryValues);
+    }
+
+    // Determine required components
+    const [required, setRequired] = useState({});
+    function updateRequired() {
+        let requiredComponents = {};
+        let activeCombo = combos[activeComboIndex];
+        if (!activeCombo) return;
+        for (let i = 0; i < activeCombo.length; i++) {
+            if (!activeCombo[i]) continue;
+            const monster = activeCombo[i];
+            const tree = TreeUtils.createMonsterTree(monster);
+            TreeUtils.getRequiredComponents(tree, requiredComponents);
+        }
+        setRequired((oldRequired) => requiredComponents);
     }
 
     // Determine missing pieces
@@ -159,7 +175,7 @@ function App() {
                     <MissingPieces missing={missing} collectMonster={collectMonster}/>  
                 </Grid>
                 <Grid item xs={12}>
-                    <Inventory inventory={inventory} updateInventory={updateInventory} />  
+                    <Inventory inventory={inventory} updateInventory={updateInventory} required={required}/>  
                 </Grid>
             </Grid>
             <Backdrop open={tooltipOpen} onClick={closeTooltip}>

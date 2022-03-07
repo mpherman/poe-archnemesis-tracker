@@ -7,15 +7,25 @@ import {
 } from "react-feather";
 
 
-function Monster({name, img, count, add, subtract}) {
+function Monster({name, img, count, add, subtract, required}) {
     function handleAdd(event) {
         add(name);
     };
     function handleSubtract(event) {
         subtract(name);
     }
+    let className = "monster-grid-item";
+    if (required) {
+        className += " item-success";
+    }
+    else if (!required && count > 0) {
+        className += " item-failure";
+    }
+    else {
+        className += " item-neutral";
+    }
     return (
-        <Grid className="monster-grid-item" container spacing={0}>
+        <Grid className={className} container spacing={0}>
             <Grid item xs={2}>
                <Grid item xs={12}>
                     <img src={img} alt={name} />
@@ -43,7 +53,7 @@ function Monster({name, img, count, add, subtract}) {
     )
 }
 
-function Inventory({inventory, updateInventory, addToCombo}) {
+function Inventory({inventory, updateInventory, addToCombo, required}) {
     const [searchString, setSearchString] = useState("");
     function handleSearch(event) {
         setSearchString(event.target.value);
@@ -70,7 +80,7 @@ function Inventory({inventory, updateInventory, addToCombo}) {
         return (
             <Grid item p={0} xs={3} key={monster}>
                 <Paper elevation={3}>
-                    <Monster name={monster} img={imageSrc} count={monsterCount} add={add} subtract={subtract} addToCombo={addToCombo}/>
+                    <Monster name={monster} img={imageSrc} count={monsterCount} add={add} subtract={subtract} addToCombo={addToCombo} required={required[monster]}/>
                 </Paper>
             </Grid>
         );

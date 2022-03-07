@@ -64,15 +64,15 @@
     border: 1px solid black;
 }
 
-.item-completed {
+.item-success {
     background-color: #bdeb88;
 }
 
-.item-missing {
+.item-failure {
     background-color: #de7a73;
 }
 
-.item-unsure {
+.item-neutral {
     background-color: #bcc4cf;
 }
 
@@ -88,7 +88,6 @@
 
 .monster-grid-item {
     padding: 5px;
-    background-color: #bcc4cf;
 }
 
 .combo-grid-missing {

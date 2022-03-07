@@ -6,7 +6,7 @@ function Monster({name, img, collect, count}) {
         collect(name);
     }
     return (
-        <Grid className="monster-grid-item" container spacing={0} alignItems="stretch">
+        <Grid className="monster-grid-item item-neutral" container spacing={0} alignItems="stretch">
             <ButtonBase onClick={handleCollect} sx={{ width: 1 }}> 
                 <Grid item xs={2}>
                 <Grid item xs={12}>
