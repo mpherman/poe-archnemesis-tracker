@@ -41,3 +41,48 @@ npm start
 
 # Usage
 
+## Combos
+
+In the Combos section, you can select the four Archnemesis recipes you are trying to create for your ultimate combo.
+
+You can select and change each monster using the dropdown menu beneath the monster's tile.
+
+Monster recipes that you have fully completed are shown in green.
+
+There is another dropdown at the top of this section that allows you to create multiple combos to work towards.
+
+Any combo that is able to be completed with the current monsters in your inventory is marked with an asterisk (`*`).
+
+![Combos](./combos.png)
+
+
+## Active Recipes
+
+The active recipes section shows recipes that are possible to do with the current monsters in your inventory.
+
+Only recipes that are relevant to the currently selected Combo will be shown.
+
+Clicking on the green check box will complete this recipe.
+
+Completing the recipe will add one of the resulting monster to your inventory and remove one of each component.
+
+![Active Recipes](./active-recipes.png)
+
+## Missing Pieces
+
+The missing pieces list shows which monsters you still need and the amount required to do your current combo.
+
+Clicking on monster tile will add it to your inventory.
+
+![Missing Pieces](./missing.png)
+
+
+## Monster Inventory
+
+1. Add or remove monsters from your inventory with the up and down arrows in the Inventory section.
+
+2. Search for specific monster names.
+
+3. The background color indicates the monster's usefulness. Green means the monster is used in current recipes. Red means the monster is not used and can be discarded.
+
+![Monster Inventory](./inventory.png)
